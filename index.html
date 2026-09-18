@@ -3,47 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Housing Helper Realty helps buyers find homes and new projects across Vasai, Nalasopara and Virar.">
+  <meta name="description" content="Housing Helper Realty helps buyers find residential properties and new projects across Vasai, Nalasopara and Virar.">
   <meta name="theme-color" content="#0b1f33">
-  <title>Housing Helper Realty | Homes in Vasai, Nalasopara & Virar</title>
+  <title>Housing Helper Realty | Properties in Vasai, Nalasopara & Virar</title>
   <style>
     :root{--navy:#0b1f33;--blue:#126782;--gold:#e8b34b;--ink:#172033;--muted:#64748b;--bg:#f5f7fa;--white:#fff;--line:#e5eaf0;--shadow:0 18px 50px rgba(11,31,51,.10)}
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
     body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
-    a{text-decoration:none;color:inherit}
-    .container{width:min(1160px,92%);margin:auto}
-    header{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
-    .nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:30px}
-    .logo{font-size:22px;font-weight:850;letter-spacing:-.5px;color:#fff}.logo span{color:var(--gold)}
-    nav{display:flex;align-items:center;gap:26px}nav a{color:#dce7ef;font-size:14px;font-weight:650}nav a:hover{color:var(--gold)}
-    .nav-cta{background:var(--gold);color:var(--navy);padding:10px 17px;border-radius:9px;font-weight:800}
-    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0b1f33 0%,#10516b 65%,#176f83 100%);color:#fff;padding:92px 0 82px}
-    .hero:after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;right:-130px;top:-170px;background:rgba(232,179,75,.14)}
-    .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.25fr .75fr;gap:55px;align-items:center}
-    .eyebrow{display:inline-flex;gap:8px;align-items:center;color:#f7d58e;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
-    .hero h1{font-size:clamp(38px,5vw,64px);line-height:1.05;letter-spacing:-2px;max-width:760px;margin-bottom:20px}
-    .hero p{font-size:18px;color:#d9e6ed;max-width:650px;margin-bottom:30px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:9px;font-weight:800;transition:.2s}.btn:hover{transform:translateY(-2px)}
+    a{text-decoration:none;color:inherit}.container{width:min(1160px,92%);margin:auto}
+    header{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:30px}.logo{font-size:22px;font-weight:850;letter-spacing:-.5px;color:#fff}.logo span{color:var(--gold)}
+    nav{display:flex;align-items:center;gap:24px}nav a{color:#dce7ef;font-size:14px;font-weight:650}nav a:hover{color:var(--gold)}.nav-cta{background:var(--gold);color:var(--navy);padding:10px 17px;border-radius:9px;font-weight:800}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0b1f33 0%,#10516b 65%,#176f83 100%);color:#fff;padding:88px 0 76px}.hero:after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;right:-130px;top:-170px;background:rgba(232,179,75,.14)}
+    .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:55px;align-items:center}.eyebrow{display:inline-flex;gap:8px;align-items:center;color:#f7d58e;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+    .hero h1{font-size:clamp(38px,5vw,64px);line-height:1.05;letter-spacing:-2px;max-width:760px;margin-bottom:20px}.hero p{font-size:18px;color:#d9e6ed;max-width:650px;margin-bottom:30px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:9px;font-weight:800;transition:.2s;cursor:pointer;border:0}.btn:hover{transform:translateY(-2px)}
     .btn-primary{background:var(--gold);color:var(--navy)}.btn-light{border:1px solid rgba(255,255,255,.25);color:#fff;background:rgba(255,255,255,.06)}
-    .hero-card{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);padding:28px;border-radius:18px;box-shadow:var(--shadow)}
-    .hero-card h3{font-size:22px;margin-bottom:8px}.hero-card p{font-size:14px;margin-bottom:20px;color:#d9e6ed}.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick div{background:rgba(255,255,255,.08);padding:14px;border-radius:10px}.quick strong{display:block;font-size:18px}.quick span{font-size:12px;color:#bcd0da}
-    .trust{background:#fff;border-bottom:1px solid var(--line)}.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);padding:22px 0;gap:20px}.trust-item{display:flex;gap:12px;align-items:center}.trust-icon{width:42px;height:42px;border-radius:11px;background:#edf6f8;display:grid;place-items:center;font-size:20px}.trust-item strong{display:block;font-size:14px}.trust-item span{display:block;color:var(--muted);font-size:12px}
+    .hero-card{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);padding:28px;border-radius:18px;box-shadow:var(--shadow)}.hero-card h3{font-size:22px;margin-bottom:8px}.hero-card p{font-size:14px;margin-bottom:20px;color:#d9e6ed}
+    .quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick div{background:rgba(255,255,255,.08);padding:14px;border-radius:10px}.quick strong{display:block;font-size:18px}.quick span{font-size:12px;color:#bcd0da}
+    .trust{background:#fff;border-bottom:1px solid var(--line)}.trust-grid{display:grid;grid-template-columns:repeat(5,1fr);padding:22px 0;gap:14px}.trust-item{display:flex;gap:10px;align-items:center}.trust-icon{width:40px;height:40px;flex:0 0 40px;border-radius:11px;background:#edf6f8;display:grid;place-items:center;font-size:18px}.trust-item strong{display:block;font-size:13px}.trust-item span{display:block;color:var(--muted);font-size:11px}
     section{padding:78px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:30px}.section-head h2{font-size:34px;letter-spacing:-1px}.section-head p{color:var(--muted);max-width:560px}.section-label{font-size:12px;color:var(--blue);font-weight:850;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
     .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(11,31,51,.06);transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-    .card-top{height:150px;background:linear-gradient(135deg,#dcecf1,#a9cdd6);display:flex;align-items:flex-end;padding:16px}.badge{background:#fff;color:var(--blue);font-size:11px;font-weight:850;padding:6px 10px;border-radius:20px}.card-body{padding:22px}.card h3{font-size:20px;margin:7px 0}.location{color:var(--muted);font-size:13px}.price{font-size:20px;font-weight:850;color:var(--navy);margin:16px 0}.card-footer{display:flex;gap:9px}.small-btn{flex:1;text-align:center;border:1px solid var(--line);padding:10px;border-radius:8px;font-size:13px;font-weight:800}.small-btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
-    .about{background:#fff}.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}.about h2{font-size:38px;line-height:1.15;margin-bottom:16px}.about p{color:var(--muted)}.features{display:grid;grid-template-columns:1fr 1fr;gap:14px}.feature{padding:20px;border:1px solid var(--line);border-radius:13px}.feature b{display:block;margin-bottom:5px}.feature span{font-size:13px;color:var(--muted)}
+    .property-image{width:100%;height:190px;object-fit:cover;display:block}.card-body{padding:20px}.badge{display:inline-block;background:#eaf5f7;color:var(--blue);font-size:11px;font-weight:850;padding:6px 10px;border-radius:20px}.card h3{font-size:20px;margin:9px 0 3px}.location{color:var(--muted);font-size:13px}.price{font-size:19px;font-weight:850;color:var(--navy);margin:14px 0}.specs{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.spec{font-size:11px;background:#f3f6f8;padding:6px 8px;border-radius:6px;color:#475569}.card-footer{display:flex;gap:9px}.small-btn{flex:1;text-align:center;border:1px solid var(--line);padding:10px;border-radius:8px;font-size:13px;font-weight:800}.small-btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .note{font-size:11px;color:var(--muted);margin-top:16px}.about{background:#fff}.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}.about h2{font-size:38px;line-height:1.15;margin-bottom:16px}.about p{color:var(--muted)}
+    .features{display:grid;grid-template-columns:1fr 1fr;gap:14px}.feature{padding:20px;border:1px solid var(--line);border-radius:13px}.feature b{display:block;margin-bottom:5px}.feature span{font-size:13px;color:var(--muted)}
     .process-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.step{background:#fff;padding:25px;border-radius:15px;border:1px solid var(--line)}.number{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:16px}.step h3{margin-bottom:7px}.step p{color:var(--muted);font-size:14px}
-    .contact{background:var(--navy);color:#fff}.contact-box{display:flex;align-items:center;justify-content:space-between;gap:30px}.contact h2{font-size:34px;margin-bottom:8px}.contact p{color:#bfd0da}.phone{font-size:20px;font-weight:850;margin-top:8px}.footer{background:#071522;color:#9fb0bc;padding:24px 0;font-size:13px}.footer-inner{display:flex;justify-content:space-between;gap:20px}.footer strong{color:#fff}
-    @media(max-width:850px){nav{display:none}.hero-grid,.about-grid{grid-template-columns:1fr}.cards,.process-grid{grid-template-columns:1fr 1fr}.hero-card{max-width:600px}.contact-box{flex-direction:column;align-items:flex-start}.trust-grid{grid-template-columns:1fr}}
-    @media(max-width:560px){section{padding:58px 0}.hero{padding:65px 0}.hero h1{letter-spacing:-1px}.cards,.process-grid,.features{grid-template-columns:1fr}.section-head{display:block}.section-head h2{font-size:29px;margin-bottom:8px}.footer-inner{display:block}.footer-inner div+div{margin-top:8px}}
+    .enquiry{background:#eef6f8}.form-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start}.form-wrap h2{font-size:36px;line-height:1.15;margin-bottom:12px}.form-wrap>div>p{color:var(--muted)}.form{background:#fff;padding:25px;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 30px rgba(11,31,51,.06)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:800;color:#334155}.field input,.field select{width:100%;padding:12px 13px;border:1px solid #d8e0e7;border-radius:8px;font:inherit;outline:none;background:#fff}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(18,103,130,.10)}.form .btn{width:100%;margin-top:16px}.form-help{font-size:11px;color:var(--muted);text-align:center;margin-top:9px}
+    .contact{background:var(--navy);color:#fff}.contact-box{display:flex;align-items:center;justify-content:space-between;gap:30px}.contact h2{font-size:34px;margin-bottom:8px}.contact p{color:#bfd0da}.phone{font-size:20px;font-weight:850;margin-top:8px}
+    .footer{background:#071522;color:#9fb0bc;padding:24px 0;font-size:13px}.footer-inner{display:flex;justify-content:space-between;gap:20px}.footer strong{color:#fff}.footer a{color:#d8e4eb}
+    @media(max-width:1000px){.trust-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:850px){nav{display:none}.hero-grid,.about-grid,.form-wrap{grid-template-columns:1fr}.cards,.process-grid{grid-template-columns:1fr 1fr}.hero-card{max-width:600px}.contact-box{flex-direction:column;align-items:flex-start}}
+    @media(max-width:560px){section{padding:58px 0}.hero{padding:65px 0}.hero h1{letter-spacing:-1px}.cards,.process-grid,.features,.form-grid{grid-template-columns:1fr}.section-head{display:block}.section-head h2{font-size:29px;margin-bottom:8px}.field.full{grid-column:auto}.trust-grid{grid-template-columns:1fr 1fr}.footer-inner{display:block}.footer-inner div+div{margin-top:8px}}
   </style>
 </head>
 <body>
 <header>
   <div class="container nav">
     <a class="logo" href="#top">Housing <span>Helper</span></a>
-    <nav><a href="#properties">Properties</a><a href="#ready-to-move">Ready to Move</a><a href="#about">About</a><a href="#process">How It Works</a><a href="#contact">Contact</a><a class="nav-cta" href="https://wa.me/917522965874" target="_blank" rel="noopener">WhatsApp</a></nav>
+    <nav><a href="#properties">Properties</a><a href="#ready-to-move">Ready to Move</a><a href="#enquiry">Enquiry</a><a href="#about">About</a><a href="#contact">Contact</a><a class="nav-cta" href="https://wa.me/917522965874" target="_blank" rel="noopener">WhatsApp</a></nav>
   </div>
 </header>
 
@@ -54,7 +51,7 @@
         <div class="eyebrow">● Local Property Assistance</div>
         <h1>Find a home that fits your life and budget.</h1>
         <p>Explore residential properties and new projects across Vasai, Nalasopara and Virar with personal assistance from enquiry to site visit.</p>
-        <div class="actions"><a class="btn btn-primary" href="https://wa.me/917522965874" target="_blank" rel="noopener">Get Property Options</a><a class="btn btn-light" href="#properties">View Properties</a></div>
+        <div class="actions"><a class="btn btn-primary" href="#enquiry">Get Property Options</a><a class="btn btn-light" href="#properties">View Properties</a></div>
       </div>
       <div class="hero-card">
         <h3>Looking for a property?</h3>
@@ -65,23 +62,41 @@
   </section>
 
   <div class="trust"><div class="container trust-grid">
-    <div class="trust-item"><div class="trust-icon">⌂</div><div><strong>Residential Focus</strong><span>Homes & new projects</span></div></div>
-    <div class="trust-item"><div class="trust-icon">⌖</div><div><strong>Local Area Knowledge</strong><span>Vasai, Nalasopara & Virar</span></div></div>
-    <div class="trust-item"><div class="trust-icon">✓</div><div><strong>Personal Assistance</strong><span>From enquiry to site visit</span></div></div>
+    <div class="trust-item"><div class="trust-icon">⌂</div><div><strong>Residential</strong><span>Homes & projects</span></div></div>
+    <div class="trust-item"><div class="trust-icon">⌖</div><div><strong>Local Expertise</strong><span>Vasai • Nalasopara • Virar</span></div></div>
+    <div class="trust-item"><div class="trust-icon">✓</div><div><strong>Shortlisting</strong><span>Based on your needs</span></div></div>
+    <div class="trust-item"><div class="trust-icon">◷</div><div><strong>Site Visits</strong><span>Easy scheduling</span></div></div>
+    <div class="trust-item"><div class="trust-icon">▣</div><div><strong>Direct Enquiry</strong><span>WhatsApp support</span></div></div>
   </div></div>
 
   <section id="properties"><div class="container">
-    <div class="section-head"><div><div class="section-label">Property options</div><h2>Featured Properties</h2></div><p>Start with these categories and message us for current availability, pricing and site-visit details.</p></div>
+    <div class="section-head"><div><div class="section-label">Property options</div><h2>Featured Property Categories</h2></div><p>Current availability, exact pricing and project details can change. Message us for the latest options before planning a visit.</p></div>
     <div class="cards">
-      <article class="card"><div class="card-top"><span class="badge">VASAI WEST</span></div><div class="card-body"><div class="location">Residential • Near local conveniences</div><h3>1 & 2 BHK Homes</h3><p class="location">Options for families and first-time buyers.</p><div class="price">Price on Enquiry</div><div class="card-footer"><a class="small-btn primary" href="https://wa.me/917522965874" target="_blank" rel="noopener">Enquire</a><a class="small-btn" href="https://wa.me/917522965874" target="_blank" rel="noopener">Site Visit</a></div></div></article>
-      <article class="card"><div class="card-top"><span class="badge">VIRAR</span></div><div class="card-body"><div class="location">Residential • Ready-to-move options</div><h3>Ready-to-Move Homes</h3><p class="location">Explore practical homes for comfortable family living.</p><div class="price">Price on Enquiry</div><div class="card-footer"><a class="small-btn primary" href="https://wa.me/917522965874" target="_blank" rel="noopener">Enquire</a><a class="small-btn" href="https://wa.me/917522965874" target="_blank" rel="noopener">Site Visit</a></div></div></article>
-      <article class="card"><div class="card-top"><span class="badge">NEW PROJECTS</span></div><div class="card-body"><div class="location">Vasai • Nalasopara • Virar</div><h3>New & Upcoming Projects</h3><p class="location">Get options matched to your preferred location and budget.</p><div class="price">Ask Our Team</div><div class="card-footer"><a class="small-btn primary" href="https://wa.me/917522965874" target="_blank" rel="noopener">Get Options</a><a class="small-btn" href="#contact">Contact</a></div></div></article>
+      <article class="card"><img class="property-image" src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80" alt="Modern apartment interior"><div class="card-body"><span class="badge">VASAI WEST</span><h3>1 & 2 BHK Homes</h3><p class="location">Residential options for families and first-time buyers.</p><div class="specs"><span class="spec">1–2 BHK</span><span class="spec">Residential</span><span class="spec">Site Visit</span></div><div class="price">Price on Enquiry</div><div class="card-footer"><a class="small-btn primary" href="https://wa.me/917522965874?text=Hi%20Housing%20Helper%2C%20I%27m%20interested%20in%201%20or%202%20BHK%20homes%20in%20Vasai%20West." target="_blank" rel="noopener">Enquire</a><a class="small-btn" href="#enquiry">Get Details</a></div></div></article>
+      <article class="card" id="ready-to-move"><img class="property-image" src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80" alt="Bright ready-to-move home interior"><div class="card-body"><span class="badge">READY TO MOVE</span><h3>Ready-to-Move Homes</h3><p class="location">Explore practical homes for comfortable family living.</p><div class="specs"><span class="spec">1–3 BHK</span><span class="spec">Ready</span><span class="spec">Site Visit</span></div><div class="price">Price on Enquiry</div><div class="card-footer"><a class="small-btn primary" href="https://wa.me/917522965874?text=Hi%20Housing%20Helper%2C%20please%20share%20ready-to-move%20home%20options." target="_blank" rel="noopener">Enquire</a><a class="small-btn" href="#enquiry">Get Details</a></div></div></article>
+      <article class="card"><img class="property-image" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80" alt="Modern residential property exterior"><div class="card-body"><span class="badge">NEW PROJECTS</span><h3>New & Upcoming Projects</h3><p class="location">Vasai • Nalasopara • Virar options matched to your budget.</p><div class="specs"><span class="spec">New Projects</span><span class="spec">1–4 BHK</span><span class="spec">Enquiry</span></div><div class="price">Ask Our Team</div><div class="card-footer"><a class="small-btn primary" href="https://wa.me/917522965874?text=Hi%20Housing%20Helper%2C%20please%20share%20new%20project%20options%20in%20Vasai%2C%20Nalasopara%20or%20Virar." target="_blank" rel="noopener">Get Options</a><a class="small-btn" href="#enquiry">Contact</a></div></div></article>
     </div>
+    <p class="note">* Images are illustrative. Listing photos, availability, prices and specifications should be confirmed with Housing Helper before advertising a specific property.</p>
+  </div></section>
+
+  <section class="enquiry" id="enquiry"><div class="container form-wrap">
+    <div><div class="section-label">Property enquiry</div><h2>Tell us what you're looking for.</h2><p>Share your preferred location, BHK and budget. When you submit, WhatsApp will open with your requirement ready to send.</p></div>
+    <form class="form" onsubmit="sendWhatsApp(event)">
+      <div class="form-grid">
+        <div class="field"><label for="name">Your Name</label><input id="name" required placeholder="Enter your name"></div>
+        <div class="field"><label for="phone">WhatsApp Number</label><input id="phone" required type="tel" inputmode="tel" placeholder="Your number"></div>
+        <div class="field"><label for="location">Preferred Location</label><select id="location"><option>Vasai West</option><option>Vasai East</option><option>Nalasopara</option><option>Virar</option><option>Any of these</option></select></div>
+        <div class="field"><label for="bhk">BHK</label><select id="bhk"><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>Not sure</option></select></div>
+        <div class="field full"><label for="budget">Approximate Budget</label><input id="budget" placeholder="Example: ₹50 lakh"></div>
+      </div>
+      <button class="btn btn-primary" type="submit">Send Requirement on WhatsApp →</button>
+      <div class="form-help">We use your details only to respond to your property enquiry.</div>
+    </form>
   </div></section>
 
   <section class="about" id="about"><div class="container about-grid">
     <div><div class="section-label">Why Housing Helper</div><h2>A simpler way to start your property search.</h2><p>We help you narrow down property choices based on location, configuration and budget, so you can spend more time comparing homes that match your needs.</p></div>
-    <div class="features"><div class="feature"><b>🏠 Relevant Options</b><span>Shortlist properties around your requirements.</span></div><div class="feature"><b>📍 Local Coverage</b><span>Focused on Vasai, Nalasopara and Virar.</span></div><div class="feature"><b>🤝 Human Assistance</b><span>Get help with enquiries and site visits.</span></div><div class="feature"><b>📱 Easy Enquiry</b><span>Message us directly on WhatsApp.</span></div></div>
+    <div class="features"><div class="feature"><b>🏠 Relevant Options</b><span>Shortlist properties around your requirements.</span></div><div class="feature"><b>📍 Local Coverage</b><span>Focused on Vasai, Nalasopara and Virar.</span></div><div class="feature"><b>🤝 Personal Assistance</b><span>Get help with enquiries and site visits.</span></div><div class="feature"><b>📱 Easy Enquiry</b><span>Message us directly on WhatsApp.</span></div><div class="feature"><b>🔎 Requirement Based</b><span>Tell us your BHK and approximate budget.</span></div><div class="feature"><b>📅 Visit Support</b><span>Coordinate a convenient property visit.</span></div></div>
   </div></section>
 
   <section id="process"><div class="container"><div class="section-head"><div><div class="section-label">Simple process</div><h2>How It Works</h2></div></div><div class="process-grid"><div class="step"><div class="number">1</div><h3>Share your requirement</h3><p>Tell us your location, BHK preference and approximate budget.</p></div><div class="step"><div class="number">2</div><h3>Get suitable options</h3><p>We help you identify property options relevant to your requirement.</p></div><div class="step"><div class="number">3</div><h3>Plan a site visit</h3><p>Shortlist what interests you and arrange a convenient visit.</p></div></div></div></section>
@@ -89,6 +104,19 @@
   <section class="contact" id="contact"><div class="container contact-box"><div><div class="section-label" style="color:#f7d58e">Let's talk property</div><h2>Ready to find your next home?</h2><p>Send your requirement and we'll get back with suitable options.</p><div class="phone">+91 75229 65874</div></div><a class="btn btn-primary" href="https://wa.me/917522965874" target="_blank" rel="noopener">Chat on WhatsApp →</a></div></section>
 </main>
 
-<footer class="footer"><div class="container footer-inner"><div><strong>Housing Helper Realty</strong> — Vasai West Real Estate</div><div>© 2026 Housing Helper Realty</div></div></footer>
+<footer class="footer"><div class="container footer-inner"><div><strong>Housing Helper Realty</strong> — Vasai, Nalasopara & Virar</div><div><a href="https://wa.me/917522965874" target="_blank" rel="noopener">WhatsApp +91 75229 65874</a> · © 2026</div></div></footer>
+
+<script>
+function sendWhatsApp(event){
+  event.preventDefault();
+  const name=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  const location=document.getElementById('location').value;
+  const bhk=document.getElementById('bhk').value;
+  const budget=document.getElementById('budget').value.trim() || 'Not specified';
+  const message='Hi Housing Helper, my name is '+name+'. My WhatsApp number is '+phone+'. I am looking for a '+bhk+' property in '+location+'. My approximate budget is '+budget+'. Please share suitable property options and site-visit details.';
+  window.open('https://wa.me/917522965874?text='+encodeURIComponent(message),'_blank','noopener');
+}
+</script>
 </body>
 </html>
