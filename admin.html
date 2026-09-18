@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Housing Helper Admin</title>
+<style>
+body{font-family:Inter,system-ui,sans-serif;background:#f5f7fa;color:#172033;margin:0}.wrap{max-width:1000px;margin:auto;padding:30px 18px}.top{background:#0b1f33;color:#fff;padding:22px;border-radius:16px;margin-bottom:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.box{background:#fff;padding:22px;border:1px solid #e5eaf0;border-radius:14px;box-shadow:0 8px 30px #0b1f3310}.field{margin-bottom:13px}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #d8e0e7;border-radius:8px;box-sizing:border-box;font:inherit}.btn{border:0;border-radius:8px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:#e8b34b;color:#0b1f33}.dark{background:#0b1f33;color:#fff}.danger{background:#fee2e2;color:#991b1b}.hidden{display:none}.status{margin-top:12px;font-size:13px}.item{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid #e5eaf0}.thumb{width:70px;height:55px;object-fit:cover;border-radius:7px}.muted{color:#64748b;font-size:12px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><div class="wrap">
+<div class="top"><h1>Housing Helper Admin</h1><p>Private property management — customers only see the public listings.</p></div>
+<div id="login" class="box"><h2>Admin Login</h2><div class="field"><label>Admin Password</label><input id="password" type="password" autocomplete="current-password"></div><button class="btn dark" onclick="login()">Sign In</button><div id="loginStatus" class="status"></div></div>
+<div id="panel" class="hidden">
+<div class="grid">
+<div class="box"><h2>Add Property</h2>
+<div class="field"><label>Property / Project Name</label><input id="name" required></div>
+<div class="field"><label>Location</label><input id="location" placeholder="Vasai West"></div>
+<div class="field"><label>Type / BHK</label><input id="type" placeholder="2 BHK Apartment"></div>
+<div class="field"><label>Basic Price</label><input id="price" placeholder="₹65 Lakh onwards"></div>
+<div class="field"><label>Possession / Status</label><input id="status" placeholder="Ready to Move"></div>
+<div class="field"><label>Short Description</label><textarea id="description" rows="3"></textarea></div>
+<div class="field"><label>Property Photo</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></div>
+<button class="btn primary" onclick="addProperty()">Upload Property</button><div id="addStatus" class="status"></div>
+</div>
+<div class="box"><h2>Admin Controls</h2><p class="muted">You control what customers see. Public pages do not expose developer or portal links.</p><br>
+<button class="btn dark" onclick="loadProperties()">Refresh Listings</button>
+<div id="list" style="margin-top:15px"></div></div>
+</div></div></div>
+<script>
+let token='';
+async function login(){const p=document.getElementById('password').value;const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',password:p})});const d=await r.json();if(d.ok){token=d.token;document.getElementById('login').classList.add('hidden');document.getElementById('panel').classList.remove('hidden');loadProperties()}else document.getElementById('loginStatus').textContent=d.error||'Login failed';}
+async function addProperty(){const f=document.getElementById('photo').files[0];if(!f){document.getElementById('addStatus').textContent='Please select a photo.';return}const reader=new FileReader();reader.onload=async()=>{const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action:'add',property:{name:name.value,location:location.value,type:type.value,price:price.value,status:status.value,description:description.value},photo:{name:f.name,data:reader.result.split(',')[1],mime:f.type}})});const d=await r.json();document.getElementById('addStatus').textContent=d.ok?'Property uploaded successfully.':'Error: '+(d.error||'Upload failed');if(d.ok){['name','location','type','price','status','description'].forEach(x=>document.getElementById(x).value='');document.getElementById('photo').value='';loadProperties()}};reader.readAsDataURL(f)}
+async function loadProperties(){const r=await fetch('/api/admin',{headers:{'Authorization':'Bearer '+token}});const d=await r.json();if(!d.ok)return;document.getElementById('list').innerHTML=d.properties.length?d.properties.map(x=>'<div class="item"><div><b>'+esc(x.name)+'</b><div class="muted">'+esc(x.location)+' • '+esc(x.type)+' • '+esc(x.price)+'</div></div><button class="btn danger" onclick="removeProperty(\''+x.id+'\')">Remove</button></div>').join(''):'<p class="muted">No uploaded properties yet.</p>'}
+async function removeProperty(id){if(!confirm('Remove this property from the public inventory?'))return;const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action:'remove',id})});const d=await r.json();if(d.ok)loadProperties();else alert(d.error||'Remove failed')}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+</script></body></html>
