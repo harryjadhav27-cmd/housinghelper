@@ -84,4 +84,4 @@ try{
   }
  }
  return res.status(405).json({ok:false,error:'Method not allowed'});
-}catch(e){return res.status(500).json({ok:false,error:e.message})}}
+}catch(e){const msg=String(e?.message||e||'Server error');if(/bad credentials|authentication|unauthorized/i.test(msg))return res.status(502).json({ok:false,error:'GitHub connection failed: GITHUB_TOKEN is invalid, expired, or does not have access to the housinghelper repository.'});return res.status(500).json({ok:false,error:msg})}}
