@@ -2,6 +2,12 @@ const crypto=require('crypto');
 const GH='https://api.github.com';
 function auth(req){const h=req.headers.authorization||'';return h.startsWith('Bearer ')?h.slice(7):''}
 function tokenFor(password){return crypto.createHmac('sha256',process.env.ADMIN_PASSWORD||'').update(password).digest('hex')}
+function seal(obj){const key=crypto.createHash('sha256').update(process.env.ADMIN_PASSWORD||'').digest();const iv=crypto.randomBytes(12);const c=crypto.createCipheriv('aes-256-gcm',key,iv);const data=Buffer.concat([c.update(JSON.stringify(obj),'utf8'),c.final()]);return iv.toString('base64')+'.'+c.getAuthTag().toString('base64')+'.'+data.toString('base64')}
+function unseal(blob){try{const [iv,tag,data]=String(blob).split('.');const key=crypto.createHash('sha256').update(process.env.ADMIN_PASSWORD||'').digest();const d=crypto.createDecipheriv('aes-256-gcm',key,Buffer.from(iv,'base64'));d.setAuthTag(Buffer.from(tag,'base64'));return JSON.parse(Buffer.concat([d.update(Buffer.from(data,'base64')),d.final()]).toString('utf8'))}catch{return {}}}
+function hydrateProject(p){const q={...p};if(q._private){Object.assign(q,unseal(q._private))}return q}
+function storeProject(p){const q={...p};const priv={builderContact:q.builderContact,builderEmail:q.builderEmail,exactAddress:q.exactAddress,reraNumber:q.reraNumber,notes:q.notes,brochure:q.brochure};delete q.builderContact;delete q.builderEmail;delete q.exactAddress;delete q.reraNumber;delete q.notes;delete q.brochure;q._private=seal(priv);return q}
+function hydrateProperty(p){const q={...p};if(q._private){Object.assign(q,unseal(q._private))}return q}
+function storeProperty(p){const q={...p};const priv={ownerName:q.ownerName,ownerContact:q.ownerContact,exactAddress:q.exactAddress,privateNotes:q.privateNotes,commissionNotes:q.commissionNotes};delete q.ownerName;delete q.ownerContact;delete q.exactAddress;delete q.privateNotes;delete q.commissionNotes;q._private=seal(priv);return q}
 async function gh(path,opts={}){const r=await fetch(GH+path,{...opts,headers:{Authorization:'Bearer '+process.env.GITHUB_TOKEN,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json',...(opts.headers||{})}});const d=await r.json();if(!r.ok)throw new Error(d.message||'GitHub API error');return d}
 async function getFile(path){const d=await gh('/repos/harryjadhav27-cmd/housinghelper/contents/'+path+'?ref=main');return {data:JSON.parse(Buffer.from(d.content,'base64').toString('utf8')),sha:d.sha}}
 async function put(path,encoded,message,sha){const body={message,content:encoded,branch:'main'};if(sha)body.sha=sha;return gh('/repos/harryjadhav27-cmd/housinghelper/contents/'+path,{method:'PUT',body:JSON.stringify(body)})}
@@ -25,7 +31,7 @@ try{
  if(!isAdmin(req))return res.status(401).json({ok:false,error:'Unauthorized'});
  if(req.method==='GET'){
   const [{data:projects},{data:properties}]=await Promise.all([getProjects(),getProps()]);
-  return res.json({ok:true,projects,properties});
+  return res.json({ok:true,projects:projects.map(hydrateProject),properties:properties.map(hydrateProperty)});
  }
  if(req.method==='POST'){
   const action=req.body?.action;
@@ -51,9 +57,9 @@ try{
     p.brochure='/brochures/'+p.id+'-'+safe;
     await put(p.brochure,req.body.brochure.data,'Upload project brochure');
    }
-   if(action==='addProject')projects.unshift(p); else projects[projects.findIndex(x=>x.id===p.id)]=p;
+   const stored=storeProject(p); if(action==='addProject')projects.unshift(stored); else projects[projects.findIndex(x=>x.id===p.id)]=stored;
    await put('projects.json',Buffer.from(JSON.stringify(projects,null,2)).toString('base64'),action==='addProject'?'Add project':'Update project',sha);
-   return res.json({ok:true,project:p});
+   return res.json({ok:true,project:hydrateProject(stored)});
   }
   if(action==='deleteProject'){
    const {data:projects,sha}=await getProjects();
@@ -70,9 +76,9 @@ try{
     if(Buffer.byteLength(req.body.photo.data,'base64')>5*1024*1024)return res.status(400).json({ok:false,error:'Image must be 5MB or smaller'});
     const safe=String(req.body.photo.name||'photo.jpg').replace(/[^a-zA-Z0-9._-]/g,'-');p.image='/property-images/'+p.id+'-'+safe;await put(p.image,req.body.photo.data,'Upload property photo');
    }
-   if(action==='add'||action==='addResale')props.unshift(p);else props[props.findIndex(x=>x.id===p.id)]=p;
+   const stored=storeProperty(p); if(action==='add'||action==='addResale')props.unshift(stored);else props[props.findIndex(x=>x.id===p.id)]=stored;
    await put('properties.json',Buffer.from(JSON.stringify(props,null,2)).toString('base64'),action==='updateProperty'?'Update property listing':'Add property listing',sha);
-   return res.json({ok:true,property:p});
+   return res.json({ok:true,property:hydrateProperty(stored)});
   }
   if(action==='remove'){
    const {data:props,sha}=await getProps();const next=props.filter(x=>x.id!==req.body.id);await put('properties.json',Buffer.from(JSON.stringify(next,null,2)).toString('base64'),'Remove property listing',sha);return res.json({ok:true});
