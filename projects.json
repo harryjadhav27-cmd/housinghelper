@@ -697,13 +697,17 @@
     "name": "Yashwant Avenue 2",
     "location": "Virar West, Virar",
     "bhk": "1, 2 & 3 BHK",
-    "price": "₹43.52 L–₹81.82 L",
+    "price": "₹45 Lakh–₹87 Lakh*",
     "size": "Residential project",
-    "possesssion": "2028",
-    "developer": "Yashwant",
+    "possesssion": "On request",
+    "developer": "Y.K. & Sons Developers",
     "rera": true,
-    "description": "Residential project in Virar West.",
-    "active": true
+    "description": "Official project image. Yashwant Avenue 2 is at YK Nagar NX Road, Virar West, with 1, 2 & 3 BHK configurations.",
+    "active": true,
+    "image": "https://www.yashwantavenue.in/__l5e/assets-v1/32eea30f-8b94-4865-878c-2cfbabb2fdf3/gal-Road_To_Building_Day_View.jpg",
+    "reraNumber": "P99000077773",
+    "exactAddress": "YK Nagar NX Road, Y K Nagar, Virar West, Maharashtra 401303",
+    "notes": "Official project gallery image/source: Yashwant Avenue 2 website. Current price and availability should be reconfirmed before customer communication."
   },
   {
     "id": "raj-yashwant-prestige",
