@@ -162,7 +162,7 @@ function sendWhatsApp(event){
 
 <script>
 (function(){
-  const cards=[...document.querySelectorAll('#projectGrid .project')];
+  const getCards=()=>[...document.querySelectorAll('#projectGrid .project')];
   const search=document.getElementById('projectSearch'), bhk=document.getElementById('bhkFilter'), price=document.getElementById('priceFilter'), status=document.getElementById('statusFilter'), count=document.getElementById('projectCount'), clear=document.getElementById('clearProjectFilters');
   function priceBand(text){
     const nums=[...text.matchAll(/₹\s*([0-9]+(?:\.[0-9]+)?)\s*(?:Cr|L)/gi)].map(m=>({n:parseFloat(m[1]),unit:m[0].toLowerCase().includes('cr')?'cr':'l'})).map(x=>x.unit==='cr'?x.n*100:x.n);
@@ -171,14 +171,14 @@ function sendWhatsApp(event){
   function apply(){
     const q=search.value.trim().toLowerCase(), b=bhk.value, p=price.value, s=status.value;
     let shown=0;
-    cards.forEach(card=>{
+    const cards=getCards(); cards.forEach(card=>{
       const text=card.innerText.toLowerCase(), band=priceBand(card.innerText);
       const okQ=!q||text.includes(q), okB=!b||new RegExp('(?:^|\\D)'+b+'\\s*(?:&|,|or)?\\s*(?:\\d+\\s*)?bhk|'+b+'\\s*bhk').test(text);
       let okP=true;if(p&&band){if(p==='under50')okP=band.min<50;if(p==='50to75')okP=band.max>=50&&band.min<=75;if(p==='75to100')okP=band.max>=75&&band.min<=100;if(p==='over100')okP=band.max>100;}else if(p)okP=false;
       let okS=true;if(s==='ready')okS=/ready|2026/.test(text);if(s==='2027')okS=text.includes('2027');if(s==='2028')okS=text.includes('2028');if(s==='2029')okS=/2029|2030/.test(text);
       const show=okQ&&okB&&okP&&okS;card.style.display=show?'':'none';if(show)shown++;
     });
-    count.textContent='Showing '+shown+' of '+cards.length+' projects';
+    count.textContent='Showing '+shown+' of '+getCards().length+' projects';
   }
   [search,bhk,price,status].forEach(el=>el.addEventListener('input',apply));clear.addEventListener('click',()=>{search.value='';bhk.value='';price.value='';status.value='';apply();});apply();
 })();
