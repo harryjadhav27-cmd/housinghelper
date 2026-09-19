@@ -47,8 +47,29 @@
     .btn,.small-btn,.nav-cta{transition:transform .18s,box-shadow .18s}.btn:hover,.small-btn:hover,.nav-cta:hover{transform:translateY(-1px)}
     .project-tools{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:18px}
     .note{line-height:1.65}
+
+    .lead-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,21,34,.72);backdrop-filter:blur(5px)}.lead-modal.show{display:flex}.lead-card{position:relative;width:min(520px,100%);background:#fff;border-radius:18px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.28);max-height:92vh;overflow:auto}.lead-card h2{font-size:28px;line-height:1.15;margin-bottom:7px}.lead-card>p{color:var(--muted);font-size:13px;margin-bottom:20px}.lead-close{position:absolute;right:14px;top:12px;width:36px;height:36px;border:0;border-radius:50%;background:#f1f5f9;color:var(--ink);font-size:23px;cursor:pointer}.lead-form{display:grid;gap:12px}.lead-field{display:flex;flex-direction:column;gap:5px}.lead-field label{font-size:12px;font-weight:800}.lead-field input,.lead-field select{width:100%;padding:12px;border:1px solid #d8e0e7;border-radius:8px;font:inherit;background:#fff}.lead-form .btn{width:100%;margin-top:5px}.lead-note{font-size:10px;color:var(--muted);text-align:center}.lead-success{display:none;background:#edf7ef;border:1px solid #cce7d0;padding:12px;border-radius:9px;font-size:13px;margin-top:12px}
 </style>
 </head>
+<body>
+<div id="firstVisitModal" class="lead-modal" aria-hidden="true">
+  <div class="lead-card" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
+    <button class="lead-close" type="button" aria-label="Close" onclick="closeLeadModal()">×</button>
+    <div class="section-label">Welcome to Housing Helper</div>
+    <h2 id="leadTitle">Tell us what you're looking for</h2>
+    <p>Share your requirement and we'll help you find suitable property options in Vasai, Virar and nearby areas.</p>
+    <form class="lead-form" onsubmit="submitLeadPopup(event)">
+      <div class="lead-field"><label for="leadName">Name</label><input id="leadName" required placeholder="Enter your name" autocomplete="name"></div>
+      <div class="lead-field"><label for="leadPhone">Contact Number</label><input id="leadPhone" required type="tel" inputmode="tel" placeholder="Enter contact number" autocomplete="tel"></div>
+      <div class="lead-field"><label for="leadArea">Preferred Area</label><select id="leadArea" required><option value="">Select area</option><option>Vasai West</option><option>Vasai East</option><option>Nalasopara</option><option>Virar</option><option>Any of these</option></select></div>
+      <div class="lead-field"><label for="leadBhk">BHK Preference</label><select id="leadBhk" required><option value="">Select BHK</option><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>Not sure</option></select></div>
+      <button class="btn btn-primary" type="submit">Send Enquiry on WhatsApp →</button>
+      <div class="lead-note">Your details are used only to respond to your property enquiry.</div>
+    </form>
+    <div id="leadSuccess" class="lead-success">Opening WhatsApp with your enquiry…</div>
+  </div>
+</div>
+
 <body>
 <header>
   <div class="container nav">
@@ -223,6 +244,13 @@ function bindProjectInteractions(){
   document.querySelectorAll('.project-enquire').forEach(link=>link.addEventListener('click',()=>{const t=link.closest('.project')?.querySelector('h3')?.textContent.trim();if(t)select.value=t}));
 }
 document.addEventListener('DOMContentLoaded',loadPublicData);
+</script>
+
+<script>
+function closeLeadModal(){const m=document.getElementById('firstVisitModal');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true');document.body.style.overflow='';localStorage.setItem('housingHelperLeadSeen','1')}}
+function submitLeadPopup(e){e.preventDefault();const name=document.getElementById('leadName').value.trim(),phone=document.getElementById('leadPhone').value.trim(),area=document.getElementById('leadArea').value,bhk=document.getElementById('leadBhk').value;const msg='Hi Housing Helper, I am '+name+'. My contact number is '+phone+'. I am looking for a '+bhk+' property in '+area+'. Please share suitable options, current price, photos and site-visit details.';document.getElementById('leadSuccess').style.display='block';localStorage.setItem('housingHelperLeadSeen','1');window.open('https://wa.me/917522965874?text='+encodeURIComponent(msg),'_blank','noopener');setTimeout(closeLeadModal,700)}
+function showFirstVisitLead(){if(localStorage.getItem('housingHelperLeadSeen')==='1')return;const m=document.getElementById('firstVisitModal');if(!m)return;m.classList.add('show');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('leadName')?.focus(),250)}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(showFirstVisitLead,900));
 </script>
 </body>
 </html>
