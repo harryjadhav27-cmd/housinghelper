@@ -598,5 +598,70 @@
     "notes": "",
     "brochure": "",
     "active": true
+  },
+  {
+    "id": "divine-sky-aura",
+    "name": "Divine Sky Aura",
+    "location": "Vasai West, Vasai",
+    "bhk": "2 BHK",
+    "price": "Price on enquiry",
+    "size": "Project size: 1 acre",
+    "possesssion": "2030",
+    "developer": "Divine",
+    "rera": true,
+    "description": "New residential project launched in Vasai West.",
+    "active": true
+  },
+  {
+    "id": "primeway-viva-nirmala-sadan",
+    "name": "Primeway Viva Nirmala Sadan",
+    "location": "Vasai West, Vasai",
+    "bhk": "3 & 4 BHK",
+    "price": "Price on enquiry",
+    "size": "Project size: 1 acre",
+    "possesssion": "2030",
+    "developer": "Primeway",
+    "rera": true,
+    "description": "New residential project in Vasai West.",
+    "active": true
+  },
+  {
+    "id": "manaki-ramchandra-heights",
+    "name": "Manaki Ramchandra Heights",
+    "location": "Virar, Palghar",
+    "bhk": "1 & 2 BHK",
+    "price": "Price on enquiry",
+    "size": "Project size: 1 acre",
+    "possesssion": "2028",
+    "developer": "Manaki",
+    "rera": true,
+    "description": "Ongoing residential project in Virar.",
+    "active": true
+  },
+  {
+    "id": "shree-garden-view",
+    "name": "Shree Garden View",
+    "location": "Nalasopara, Palghar",
+    "bhk": "1 & 2 BHK",
+    "price": "Price on enquiry",
+    "size": "44 units",
+    "possesssion": "2029",
+    "developer": "Shree Garden View",
+    "rera": true,
+    "description": "New residential project launched in Nalasopara.",
+    "active": true
+  },
+  {
+    "id": "genisia-pinnacle",
+    "name": "Genisia Pinnacle",
+    "location": "Vasai, Palghar",
+    "bhk": "1 & 2 BHK",
+    "price": "Price on enquiry",
+    "size": "18 units",
+    "possesssion": "2029",
+    "developer": "Genisia",
+    "rera": true,
+    "description": "New residential project in Vasai.",
+    "active": true
   }
 ]
