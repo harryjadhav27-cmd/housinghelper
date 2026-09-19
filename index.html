@@ -38,9 +38,15 @@
 
     .project-tools{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;margin-bottom:22px;box-shadow:0 8px 28px rgba(11,31,51,.05)}.project-tools-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px}.project-tools input,.project-tools select{width:100%;padding:12px 13px;border:1px solid #d8e0e7;border-radius:9px;background:#fff;font:inherit;color:var(--ink);outline:none}.project-tools input:focus,.project-tools select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(18,103,130,.1)}.filter-summary{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:11px;color:var(--muted);font-size:12px}.clear-filters{border:0;background:none;color:var(--blue);font-weight:800;cursor:pointer}.no-projects{grid-column:1/-1;background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px;text-align:center;color:var(--muted)}
     @media(max-width:850px){.project-tools-grid{grid-template-columns:1fr 1fr}} @media(max-width:560px){.project-tools-grid{grid-template-columns:1fr}.filter-summary{align-items:flex-start;flex-direction:column}}
-    .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.project-image{width:100%;height:170px;object-fit:cover;border-radius:12px;margin-bottom:4px}.project{background:#fff;border:1px solid var(--line);border-radius:15px;padding:21px;box-shadow:0 8px 28px rgba(11,31,51,.05)}.project h3{font-size:19px;margin:11px 0 7px}.project p{font-size:13px}.project .muted{color:var(--muted);margin-top:5px}.project>a{display:inline-block;margin-top:15px;color:var(--blue);font-size:13px;font-weight:800}
+    .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.project-image{width:100%;height:170px;object-fit:cover;border-radius:12px;margin-bottom:4px}.project{background:#fff;border:1px solid var(--line);border-radius:15px;padding:21px;box-shadow:0 8px 28px rgba(11,31,51,.05);transition:transform .2s,box-shadow .2s}.project:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(11,31,51,.10)}.project h3{font-size:19px;margin:11px 0 7px}.project p{font-size:13px}.project .muted{color:var(--muted);margin-top:5px}.project>a{display:inline-block;margin-top:15px;color:var(--blue);font-size:13px;font-weight:800}
     @media(max-width:850px){.project-grid{grid-template-columns:1fr 1fr}} @media(max-width:560px){.project-grid{grid-template-columns:1fr}}
-   .nav-admin{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:800;background:#fff;color:var(--ink)}</style>
+   .nav-admin{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:800;background:#fff;color:var(--ink)}
+    .nav-admin{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:800;background:#fff;color:var(--ink)}
+    .nav-admin:hover{background:#f4f7fa}
+    .btn,.small-btn,.nav-cta{transition:transform .18s,box-shadow .18s}.btn:hover,.small-btn:hover,.nav-cta:hover{transform:translateY(-1px)}
+    .project-tools{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:18px}
+    .note{line-height:1.65}
+</style>
 </head>
 <body>
 <header>
@@ -54,8 +60,8 @@
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <div class="eyebrow">● Local Property Assistance</div>
-        <h1>Find a home that fits your life and budget.</h1>
+        <div class="eyebrow">● Trusted Local Property Assistance</div>
+        <h1>Find the right property for your life and budget.</h1>
         <p>Explore new residential projects in Vasai West with project details, photos, videos and personal assistance from enquiry to site visit.</p>
         <div class="actions"><a class="btn btn-primary" href="#enquiry">Get Property Options</a><a class="btn btn-light" href="#properties">View Properties</a></div>
       </div>
