@@ -13,7 +13,7 @@ async function getFile(path){const d=await gh('/repos/harryjadhav27-cmd/housingh
 async function put(path,encoded,message,sha){const body={message,content:encoded,branch:'main'};if(sha)body.sha=sha;return gh('/repos/harryjadhav27-cmd/housinghelper/contents/'+path,{method:'PUT',body:JSON.stringify(body)})}
 async function getProps(){return getFile('properties.json')}
 async function getProjects(){return getFile('projects.json')}
-function publicProject(p){return {id:p.id,name:p.name,location:p.location,bhk:p.bhk,price:p.price,size:p.size,possesssion:p.possesssion||p.possession,developer:p.developer,rera:p.rera,image:p.image,description:p.description,active:p.active!==false}}
+function publicProject(p){return {id:p.id,name:p.name,location:p.location,bhk:p.bhk,price:p.price,size:p.size,possesssion:p.possesssion||p.possession,developer:p.developer,rera:p.rera,image:p.image,video:p.video||'',description:p.description,active:p.active!==false}}
 function publicProperty(p){return {id:p.id,name:p.name,location:p.location,type:p.type,price:p.price,status:p.status,description:p.description,image:p.image,category:p.category||'listing',createdAt:p.createdAt}}
 function isAdmin(req){return auth(req)===tokenFor(process.env.ADMIN_PASSWORD)}
 module.exports=async(req,res)=>{
@@ -57,6 +57,7 @@ try{
     p.brochure='/brochures/'+p.id+'-'+safe;
     await put(p.brochure,req.body.brochure.data,'Upload project brochure');
    }
+   if(!/vasai\s*west/i.test(String(p.location||'')))return res.status(400).json({ok:false,error:'New Projects must be located in Vasai West.'});
    const stored=storeProject(p); if(action==='addProject')projects.unshift(stored); else projects[projects.findIndex(x=>x.id===p.id)]=stored;
    await put('projects.json',Buffer.from(JSON.stringify(projects,null,2)).toString('base64'),action==='addProject'?'Add project':'Update project',sha);
    return res.json({ok:true,project:hydrateProject(stored)});
