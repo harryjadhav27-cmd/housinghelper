@@ -170,40 +170,49 @@ function sendWhatsApp(event){
 </script>
 
 <script>
-(function(){
-  const getCards=()=>[...document.querySelectorAll('#projectGrid .project')];
-  const search=document.getElementById('projectSearch'), bhk=document.getElementById('bhkFilter'), price=document.getElementById('priceFilter'), status=document.getElementById('statusFilter'), count=document.getElementById('projectCount'), clear=document.getElementById('clearProjectFilters');
-  function priceBand(text){
-    const nums=[...text.matchAll(/₹\s*([0-9]+(?:\.[0-9]+)?)\s*(?:Cr|L)/gi)].map(m=>({n:parseFloat(m[1]),unit:m[0].toLowerCase().includes('cr')?'cr':'l'})).map(x=>x.unit==='cr'?x.n*100:x.n);
-    if(!nums.length)return null; const min=Math.min(...nums),max=Math.max(...nums); return {min,max};
-  }
-  function apply(){
-    const q=search.value.trim().toLowerCase(), b=bhk.value, p=price.value, s=status.value;
-    let shown=0;
-    const cards=getCards(); cards.forEach(card=>{
-      const text=card.innerText.toLowerCase(), band=priceBand(card.innerText);
-      const okQ=!q||text.includes(q), okB=!b||new RegExp('(?:^|\\D)'+b+'\\s*(?:&|,|or)?\\s*(?:\\d+\\s*)?bhk|'+b+'\\s*bhk').test(text);
-      let okP=true;if(p&&band){if(p==='under50')okP=band.min<50;if(p==='50to75')okP=band.max>=50&&band.min<=75;if(p==='75to100')okP=band.max>=75&&band.min<=100;if(p==='over100')okP=band.max>100;}else if(p)okP=false;
-      let okS=true;if(s==='ready')okS=/ready|2026/.test(text);if(s==='2027')okS=text.includes('2027');if(s==='2028')okS=text.includes('2028');if(s==='2029')okS=/2029|2030/.test(text);
-      const show=okQ&&okB&&okP&&okS;card.style.display=show?'':'none';if(show)shown++;
-    });
-    count.textContent='Showing '+shown+' of '+getCards().length+' projects';
-  }
-  [search,bhk,price,status].forEach(el=>el.addEventListener('input',apply));clear.addEventListener('click',()=>{search.value='';bhk.value='';price.value='';status.value='';apply();});apply();
-})();
+function applyProjectFilters(){
+  const search=document.getElementById('projectSearch'), bhk=document.getElementById('bhkFilter'), price=document.getElementById('priceFilter'), status=document.getElementById('statusFilter'), count=document.getElementById('projectCount');
+  if(!search||!bhk||!price||!status||!count)return;
+  const q=search.value.trim().toLowerCase(), b=bhk.value, p=price.value, s=status.value;
+  const cards=[...document.querySelectorAll('#projectGrid .project')]; let shown=0;
+  cards.forEach(card=>{
+    const text=card.innerText.toLowerCase();
+    const nums=[...text.matchAll(/₹\s*([0-9]+(?:\.[0-9]+)?)\s*(cr|l)/gi)].map(m=>m[2].toLowerCase()==='cr'?parseFloat(m[1])*100:parseFloat(m[1]));
+    const min=nums.length?Math.min(...nums):null,max=nums.length?Math.max(...nums):null;
+    const okQ=!q||text.includes(q);
+    const okB=!b||new RegExp('(^|\\D)'+b+'\\s*(bhk|&|,|or)','i').test(text)||text.includes(b+' bhk');
+    let okP=!p;if(p==='under50')okP=max!==null&&min<50;if(p==='50to75')okP=max!==null&&max>=50&&min<=75;if(p==='75to100')okP=max!==null&&max>=75&&min<=100;if(p==='over100')okP=max!==null&&max>100;
+    let okS=!s;if(s==='ready')okS=/ready|2026/.test(text);if(s==='2027')okS=text.includes('2027');if(s==='2028')okS=text.includes('2028');if(s==='2029')okS=/2029|2030/.test(text);
+    const show=okQ&&okB&&okP&&okS;card.style.display=show?'':'none';if(show)shown++;
+  });
+  count.textContent='Showing '+shown+' of '+cards.length+' projects';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  ['projectSearch','bhkFilter','priceFilter','statusFilter'].forEach(id=>document.getElementById(id)?.addEventListener('input',applyProjectFilters));
+  document.getElementById('clearProjectFilters')?.addEventListener('click',()=>{document.getElementById('projectSearch').value='';document.getElementById('bhkFilter').value='';document.getElementById('priceFilter').value='';document.getElementById('statusFilter').value='';applyProjectFilters()});
+  applyProjectFilters();
+});
 </script>
 <script>
 async function loadPublicData(){
   try{
-    const r=await fetch('/api/admin?public=1');
-    const d=await r.json();
-    if(!d.ok) throw new Error(d.error||'Unable to load');
+    let d;
+    try{
+      const r=await fetch('/api/admin?public=1');
+      d=await r.json();
+      if(!d.ok) throw new Error(d.error||'Unable to load');
+    }catch(apiError){
+      const pr=await fetch('/projects.json?cache='+Date.now());
+      const projects=await pr.json();
+      d={ok:true,projects:projects.filter(p=>p.active!==false),properties:[]};
+    }
     const grid=document.getElementById('projectGrid');
     const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     grid.innerHTML=d.projects.map(p=>'<article class="project" data-project-id="'+esc(p.id)+'"><img class="project-image" src="'+esc(p.image||'')+'" alt="'+esc(p.name)+' project photo"><span class="badge">'+esc((p.location||'').toUpperCase())+'</span><h3>'+esc(p.name)+'</h3><p><strong>'+esc(p.bhk||'Details on enquiry')+'</strong> • '+esc(p.price||'Price on enquiry')+'</p><p class="muted">'+esc(p.size||'')+(p.possesssion?' • Possession: '+esc(p.possesssion):'')+'</p><p class="muted">'+(p.rera?'RERA listed':'RERA details on enquiry')+(p.developer?' • '+esc(p.developer):'')+'</p><a href="#enquiry" class="project-enquire">Enquire for Full Details →</a>'+'</article>').join('');
     const props=document.getElementById('admin-properties');
     props.innerHTML=d.properties.length?d.properties.map(p=>'<article class="card"><img class="property-image" src="'+esc(p.image||'')+'" alt="'+esc(p.name)+'"><div class="card-body"><span class="badge">'+esc((p.category==='resale'?'RESALE PROPERTY':(p.location||'PROPERTY')).toUpperCase())+'</span><h3>'+esc(p.name)+'</h3><p class="location">'+esc(p.location||'')+'</p><div class="specs"><span class="spec">'+esc(p.type||'Residential')+'</span><span class="spec">'+esc(p.status||'Enquiry')+'</span></div><div class="price">'+esc(p.price||'Price on Enquiry')+'</div><p class="note">'+esc(p.description||'Contact Housing Helper for full details.')+'</p><div class="card-footer"><a class="small-btn primary" target="_blank" rel="noopener" href="https://wa.me/917522965874?text='+encodeURIComponent('Hi Housing Helper, I am interested in '+(p.name||'this property')+'. Please share full details, current price, availability and site visit options.')+'">Enquire</a><a class="small-btn" href="#enquiry">Get Details</a></div></div></article>').join(''):'<p class="note">No new properties listed yet.</p>';
     bindProjectInteractions();
+    applyProjectFilters();
   }catch(e){console.error(e);document.getElementById('projectGrid').innerHTML='<p class="no-projects">Project listings are temporarily unavailable. Please contact Housing Helper on WhatsApp.</p>'}
 }
 function bindProjectInteractions(){
