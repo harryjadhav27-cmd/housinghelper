@@ -56,9 +56,7 @@ try{
     const safe=String(req.body.brochure.name||'brochure.pdf').replace(/[^a-zA-Z0-9._-]/g,'-');
     p.brochure='/brochures/'+p.id+'-'+safe;
     await put(p.brochure,req.body.brochure.data,'Upload project brochure');
-   }
-   if(!/vasai\s*west/i.test(String(p.location||'')))return res.status(400).json({ok:false,error:'New Projects must be located in Vasai West.'});
-   const stored=storeProject(p); if(action==='addProject')projects.unshift(stored); else projects[projects.findIndex(x=>x.id===p.id)]=stored;
+   }   const stored=storeProject(p); if(action==='addProject')projects.unshift(stored); else projects[projects.findIndex(x=>x.id===p.id)]=stored;
    await put('projects.json',Buffer.from(JSON.stringify(projects,null,2)).toString('base64'),action==='addProject'?'Add project':'Update project',sha);
    return res.json({ok:true,project:hydrateProject(stored)});
   }
