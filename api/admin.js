@@ -14,7 +14,7 @@ async function put(path,encoded,message,sha){const body={message,content:encoded
 async function getProps(){return getFile('properties.json')}
 async function getProjects(){return getFile('projects.json')}
 function publicProject(p){return {id:p.id,name:p.name,location:p.location,bhk:p.bhk,price:p.price,size:p.size,possesssion:p.possesssion||p.possession,developer:p.developer,rera:p.rera,image:p.image,description:p.description,active:p.active!==false}}
-function publicProperty(p){return {id:p.id,name:p.name,location:p.location,type:p.type,price:p.price,status:p.status,description:p.description,image:p.image,category:p.category||'listing',createdAt:p.createdAt}}
+function publicProperty(p){return {id:p.id,name:p.name,location:p.location,type:p.type,price:p.price,status:p.status,description:p.description,image:p.image,images:Array.isArray(p.images)&&p.images.length?p.images:(p.image?[p.image]:[]),video:p.video||'',category:p.category||'listing',createdAt:p.createdAt}}
 function isAdmin(req){return auth(req)===tokenFor(process.env.ADMIN_PASSWORD)}
 module.exports=async(req,res)=>{
 try{
@@ -75,6 +75,11 @@ try{
     if(Buffer.byteLength(req.body.photo.data,'base64')>5*1024*1024)return res.status(400).json({ok:false,error:'Image must be 5MB or smaller'});
     const safe=String(req.body.photo.name||'photo.jpg').replace(/[^a-zA-Z0-9._-]/g,'-');p.image='/property-images/'+p.id+'-'+safe;await put(p.image,req.body.photo.data,'Upload property photo');
    }
+   if(Array.isArray(p.images)){
+    p.images=p.images.filter(x=>typeof x==='string'&&/^https?:\/\//.test(x)).slice(0,5);
+    if(p.images.length)p.image=p.images[0];
+   }
+   if(p.video && typeof p.video!=='string')p.video='';
    const stored=storeProperty(p); if(action==='add'||action==='addResale')props.unshift(stored);else props[props.findIndex(x=>x.id===p.id)]=stored;
    await put('properties.json',Buffer.from(JSON.stringify(props,null,2)).toString('base64'),action==='updateProperty'?'Update property listing':'Add property listing',sha);
    return res.json({ok:true,property:hydrateProperty(stored)});
