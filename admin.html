@@ -129,7 +129,9 @@ function applyPropertySearch(){
     const text=(el.getAttribute('data-search')||'').toLowerCase();
     const okQ=!terms.length || terms.every(function(term){return text.includes(term);});
     const okK=!kind || el.getAttribute('data-kind')===kind;
-    const okB=!bhk || text.includes(bhk+' bhk') || new RegExp('(^|\\\\D)'+bhk+'\\\\s*bhk','i').test(text);
+    // Match configurations such as "1, 2 & 3 BHK", not only the exact text "1 BHK".
+    const bhkConfig=(el.querySelector('.detail-grid div:nth-child(2)')?.textContent||'').toLowerCase();
+    const okB=!bhk || new RegExp('(^|\\\\D)'+bhk+'(\\\\D|$)').test(bhkConfig);
     const show=okQ&&okK&&okB;
     el.style.display=show?'':'none';
     if(show)shown++;
@@ -137,7 +139,15 @@ function applyPropertySearch(){
   const count=document.getElementById('propertySearchCount');
   if(count)count.textContent='Showing '+shown+' of '+total+' listings';
 }
-function clearPropertySearch(){if($('propertySearch'))$('propertySearch').value='';if($('propertyTypeFilter'))$('propertyTypeFilter').value='';if($('propertyBhkFilter'))$('propertyBhkFilter').value='';applyPropertySearch()}
+function resetPropertyFilters(){
+  const search=document.getElementById('propertySearch');
+  const type=document.getElementById('propertyTypeFilter');
+  const bhk=document.getElementById('propertyBhkFilter');
+  if(search)search.value='';
+  if(type)type.value='';
+  if(bhk)bhk.value='';
+}
+function clearPropertySearch(){resetPropertyFilters();applyPropertySearch()}
 async function removeProperty(id){if(!confirm('Remove this property from the public listing?'))return;await post({action:'remove',id});loadData()}
 async function post(body,statusId,success){const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});const d=await r.json();if(statusId)$(statusId).textContent=d.ok?(success||'Saved.'):'Error: '+(d.error||'Request failed');if(!d.ok)throw new Error(d.error||'Request failed');return d}
 </script><script>document.addEventListener('DOMContentLoaded',()=>{['propertySearch','propertyTypeFilter','propertyBhkFilter'].forEach(id=>document.getElementById(id)?.addEventListener('input',applyPropertySearch));$('rPhotos')?.addEventListener('change',showResalePreviews);$('rVideo')?.addEventListener('change',showResalePreviews);});</script>
