@@ -117,4 +117,40 @@ function clearPropertySearch(){if($('propertySearch'))$('propertySearch').value=
 async function removeProperty(id){if(!confirm('Remove this property from the public listing?'))return;await post({action:'remove',id});loadData()}
 async function post(body,statusId,success){const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});const d=await r.json();if(statusId)$(statusId).textContent=d.ok?(success||'Saved.'):'Error: '+(d.error||'Request failed');if(!d.ok)throw new Error(d.error||'Request failed');return d}
 </script><script>document.addEventListener('DOMContentLoaded',()=>{['propertySearch','propertyTypeFilter','propertyBhkFilter'].forEach(id=>document.getElementById(id)?.addEventListener('input',applyPropertySearch));$('rPhotos')?.addEventListener('change',showResalePreviews);$('rVideo')?.addEventListener('change',showResalePreviews);});</script>
-</body></html>
+<script>
+(function(){
+  function setLoginMessage(msg){
+    var el=document.getElementById('loginStatus');
+    if(el){el.textContent=msg;el.style.color='#991b1b';}
+  }
+  window.login=async function(){
+    var status=document.getElementById('loginStatus');
+    var btn=document.querySelector('#login .btn');
+    var password=document.getElementById('password')?.value||'';
+    if(!password){setLoginMessage('Please enter your admin password.');return;}
+    if(btn){btn.disabled=true;btn.textContent='Signing in...';}
+    if(status){status.textContent='Connecting to admin server...';status.style.color='#126782';}
+    try{
+      var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',password:password})});
+      var raw=await r.text(), d={};
+      try{d=JSON.parse(raw)}catch(e){}
+      if(!r.ok||!d.ok){
+        setLoginMessage(d.error||('Admin login failed (HTTP '+r.status+').'));
+        return;
+      }
+      window.token=d.token;
+      document.getElementById('login').classList.add('hidden');
+      document.getElementById('panel').classList.remove('hidden');
+      if(typeof window.loadData==='function') await window.loadData();
+    }catch(e){
+      setLoginMessage('Cannot connect to /api/admin. Please try again after the latest deployment is Ready.');
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent='Sign In';}
+    }
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.querySelector('#login .btn');
+    if(b)b.onclick=window.login;
+  });
+})();
+</script></body></html>
