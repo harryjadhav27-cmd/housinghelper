@@ -8,7 +8,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f4f7fa;color:#172033;mar
 <div class="top"><h1>Housing Helper Admin</h1><p>Private control panel. Customers see only public photos and basic property/project details.</p></div>
 <div id="login" class="box"><h2>Admin Login</h2><div class="field"><label>Admin Password</label><input id="password" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"></div><button class="btn dark" onclick="login()">Sign In</button><div id="loginStatus" class="status"></div></div>
 <div id="panel" class="hidden">
-<div class="tabs"><button class="tab active" onclick="showTab('projects',this)">Projects</button><button class="tab" onclick="showTab('resale',this)">Add Resale Property</button><button class="tab" onclick="showTab('properties',this)">All Property Listings</button></div>
+<div class="tabs" id="adminTabs"><button type="button" class="tab active" data-tab="projects">Projects</button><button type="button" class="tab" data-tab="resale">Add Resale Property</button><button type="button" class="tab" data-tab="properties">All Property Listings</button></div>
 
 <section id="projects">
 <div class="grid">
@@ -151,6 +151,28 @@ async function post(body,statusId,success){const r=await fetch('/api/admin',{met
   document.addEventListener('DOMContentLoaded',function(){
     var b=document.querySelector('#login .btn');
     if(b)b.onclick=window.login;
+  });
+})();
+</script>
+<script>
+(function(){
+  function activateAdminTab(id, btn){
+    ['projects','resale','properties'].forEach(function(x){
+      var section=document.getElementById(x);
+      if(section) section.classList.toggle('hidden', x!==id);
+    });
+    document.querySelectorAll('#adminTabs .tab').forEach(function(x){x.classList.remove('active');});
+    if(btn) btn.classList.add('active');
+    if(id==='properties' && typeof window.applyPropertySearch==='function') window.applyPropertySearch();
+  }
+  window.showTab=activateAdminTab;
+  document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('#adminTabs .tab').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.preventDefault();
+        activateAdminTab(btn.getAttribute('data-tab'),btn);
+      });
+    });
   });
 })();
 </script></body></html>
