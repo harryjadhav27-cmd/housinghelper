@@ -104,7 +104,7 @@ async function addResale(){
   const btn=$('addResaleBtn'); const status=$('resaleStatus'); const photos=Array.from($('rPhotos').files||[]); const video=$('rVideo').files[0];
   if(!photos.length){status.textContent='Please select at least one property photo.';return}
   if(photos.length>5){status.textContent='Please select a maximum of 5 photos.';return}
-  if(video && !/^video\\/(mp4|webm|quicktime)$/.test(video.type)){status.textContent='Please select an MP4, WebM or MOV video.';return}
+  if(video && !/^video\/(mp4|webm|quicktime)$/.test(video.type)){status.textContent='Please select an MP4, WebM or MOV video.';return}
   btn.disabled=true; btn.textContent='Uploading...'; status.textContent=''; $('uploadProgress').textContent='Preparing uploads...';
   try{
     const imageUrls=[]; for(let i=0;i<photos.length;i++) imageUrls.push(await uploadResaleBlob(photos[i],'photo',i,photos.length+(video?1:0)));
