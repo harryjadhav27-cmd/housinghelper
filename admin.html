@@ -227,4 +227,50 @@ async function post(body,statusId,success){const r=await fetch('/api/admin',{met
     });
   });
 })();
+</script><script>
+(function(){
+  function safe(v){return String(v??'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
+  window.loadAdminListingsDirect=async function(){
+    var box=document.getElementById('propertyList');
+    var count=document.getElementById('propertySearchCount');
+    if(!box)return;
+    box.innerHTML='<p class="muted">Loading listings...</p>';
+    try{
+      var t=window.token||'';
+      if(!t){box.innerHTML='<p class="muted">Admin session is missing. Please sign in again.</p>';return;}
+      var r=await fetch('/api/admin',{method:'GET',headers:{Authorization:'Bearer '+t,Accept:'application/json'}});
+      var raw=await r.text(), d={};
+      try{d=JSON.parse(raw)}catch(e){}
+      if(!r.ok||!d.ok){
+        box.innerHTML='<p class="muted">Could not load listings. HTTP '+r.status+(d.error?': '+safe(d.error):'')+'</p>';
+        return;
+      }
+      var projects=Array.isArray(d.projects)?d.projects:[], props=Array.isArray(d.properties)?d.properties:[];
+      var rows=[];
+      projects.forEach(function(p){
+        rows.push('<div class="item admin-listing" data-kind="project" data-search="'+safe([p.name,p.location,p.bhk,p.price,p.developer,p.builderContact,p.builderEmail,p.reraNumber,p.exactAddress,p.notes].filter(Boolean).join(' '))+'"><div class="item-head"><div><span class="tag">PROJECT</span><b>'+safe(p.name||'Unnamed Project')+'</b><div class="muted">'+safe(p.location||'')+' • '+safe(p.bhk||'')+' • '+safe(p.price||'')+'</div></div></div><div class="detail-grid"><div><b>Location:</b> '+safe(p.location||'Not added')+'</div><div><b>BHK:</b> '+safe(p.bhk||'Not added')+'</div><div><b>Price:</b> '+safe(p.price||'Not added')+'</div><div><b>Developer:</b> '+safe(p.developer||'Not added')+'</div><div><b>Possession:</b> '+safe(p.possesssion||p.possession||'Not added')+'</div><div><b>RERA:</b> '+(p.rera?'Yes':'No / Verify')+'</div></div><div class="private"><b>Builder Contact:</b> '+safe(p.builderContact||'Not added')+'<br><b>Address:</b> '+safe(p.exactAddress||'Not added')+'</div></div>');
+      });
+      props.forEach(function(p){
+        rows.push('<div class="item admin-listing" data-kind="resale" data-search="'+safe([p.name,p.location,p.type,p.price,p.status,p.ownerName,p.ownerContact,p.exactAddress,p.privateNotes].filter(Boolean).join(' '))+'"><div class="item-head"><div><span class="tag">RESALE</span><b>'+safe(p.name||'Unnamed Property')+'</b><div class="muted">'+safe(p.location||'')+' • '+safe(p.type||'')+' • '+safe(p.price||'')+'</div></div></div><div class="private"><b>Owner:</b> '+safe(p.ownerName||'—')+' | <b>Contact:</b> '+safe(p.ownerContact||'—')+'<br><b>Address:</b> '+safe(p.exactAddress||'—')+'</div></div>');
+      });
+      box.innerHTML=rows.length?rows.join(''):'<p class="muted">No listings found. Projects returned: '+projects.length+', resale returned: '+props.length+'</p>';
+      if(count)count.textContent='Showing '+rows.length+' listings';
+      if(typeof window.applyPropertySearch==='function')window.applyPropertySearch();
+    }catch(e){
+      box.innerHTML='<p class="muted">Listings error: '+safe(e.message||e)+'</p>';
+    }
+  };
+  var oldLogin=window.login;
+  window.login=async function(){
+    await oldLogin.apply(this,arguments);
+    if(!document.getElementById('login')?.classList.contains('hidden')){
+      return;
+    }
+    setTimeout(window.loadAdminListingsDirect,100);
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var tab=document.querySelector('[data-tab="properties"]');
+    if(tab)tab.addEventListener('click',function(){setTimeout(window.loadAdminListingsDirect,100);});
+  });
+})();
 </script></body></html>
