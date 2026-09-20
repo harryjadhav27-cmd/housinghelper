@@ -7,7 +7,7 @@ function tokenFor(password){
 
 module.exports=async(req,res)=>{
   try{
-    if(!process.env.BLOB_READ_WRITE_TOKEN)return res.status(500).json({error:'Vercel Blob is not configured. Create a Blob store and connect it to this project so BLOB_READ_WRITE_TOKEN is available.'});
+    if(!process.env.BLOB_READ_WRITE_TOKEN)return res.status(500).json({error:'Vercel Blob storage is not connected to this deployment. Connect a Vercel Blob Store to this project and redeploy so BLOB_READ_WRITE_TOKEN is available.'});
     const body=req.body;
     if(!body)return res.status(400).json({error:'Missing upload request body'});
     if(body.type==='blob.generate-client-token'){
