@@ -47,7 +47,25 @@ body{font-family:Inter,system-ui,sans-serif;background:#f4f7fa;color:#172033;mar
 let token='',cache={projects:[],properties:[]};
 const $=id=>document.getElementById(id);
 async function login(){const status=$('loginStatus'),btn=document.querySelector('#login .btn');status.textContent='';const password=$('password').value;if(!password){status.textContent='Please enter your admin password.';return}btn.disabled=true;btn.textContent='Signing in...';try{const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',password})});const text=await r.text();let d={};try{d=JSON.parse(text)}catch{d={error:'Server returned an invalid response. Please check the Vercel deployment and API configuration.'}}if(!r.ok||!d.ok){status.textContent=d.error||('Login failed (HTTP '+r.status+').');return}token=d.token;$('login').classList.add('hidden');$('panel').classList.remove('hidden');await loadData()}catch(e){status.textContent='Cannot connect to the admin server. Please refresh and try again.'}finally{btn.disabled=false;btn.textContent='Sign In'}}
-async function loadData(){try{const r=await fetch('/api/admin',{headers:{Authorization:'Bearer '+token}});const text=await r.text();let d={};try{d=JSON.parse(text)}catch{d={error:'Server returned an invalid response.'}}if(!r.ok||!d.ok){alert(d.error||('Session error (HTTP '+r.status+').'));return}cache=d;renderProjects();renderProperties()}catch(e){alert('Cannot connect to the admin server. Please check the deployment/API configuration.')}}
+async function loadData(){
+  const errorBox=document.getElementById('propertyList');
+  try{
+    const r=await fetch('/api/admin',{headers:{Authorization:'Bearer '+token}});
+    const raw=await r.text();
+    let d={};
+    try{d=JSON.parse(raw)}catch(e){d={error:'Server returned an invalid response.'}}
+    if(!r.ok||!d.ok){
+      if(errorBox)errorBox.innerHTML='<p class="muted">Admin data error: '+esc(d.error||('HTTP '+r.status))+'</p>';
+      return;
+    }
+    cache={projects:Array.isArray(d.projects)?d.projects:[],properties:Array.isArray(d.properties)?d.properties:[]};
+    // Render the listings independently so an issue in the project editor cannot hide All Property Listings.
+    try{renderProperties();}catch(e){if(errorBox)errorBox.innerHTML='<p class="muted">Listings could not be rendered: '+esc(e.message||e)+'</p>';}
+    try{renderProjects();}catch(e){}
+  }catch(e){
+    if(errorBox)errorBox.innerHTML='<p class="muted">Cannot load admin listings: '+esc(e.message||e)+'</p>';
+  }
+}
 function showTab(id,btn){['projects','resale','properties'].forEach(x=>$(x).classList.toggle('hidden',x!==id));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function renderProjects(){$('projectList').innerHTML=cache.projects.length?cache.projects.map(p=>'<div class="item"><div class="item-head"><div><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.location)+' • '+esc(p.bhk)+' • '+esc(p.price)+' • '+esc(p.developer)+'</div></div><div class="item-actions"><button class="btn secondary" onclick="editProject(\''+p.id+'\')">Edit</button><button class="btn danger" onclick="deleteProject(\''+p.id+'\')">Delete</button></div></div><div class="detail-grid"><div><b>Location:</b> '+esc(p.location||'Not added')+'</div><div><b>BHK:</b> '+esc(p.bhk||'Not added')+'</div><div><b>Public Price:</b> '+esc(p.price||'Not added')+'</div><div><b>Size:</b> '+esc(p.size||'Not added')+'</div><div><b>Possession:</b> '+esc(p.possesssion||p.possession||'Not added')+'</div><div><b>Developer:</b> '+esc(p.developer||'Not added')+'</div><div><b>RERA Listed:</b> '+(p.rera?'Yes':'No / Verify')+'</div><div><b>Active:</b> '+(p.active!==false?'Yes':'No')+'</div><div><b>Description:</b> '+esc(p.description||'Not added')+'</div><div><b>Builder Contact:</b> '+esc(p.builderContact||'Not added')+'</div><div><b>Builder Email:</b> '+esc(p.builderEmail||'Not added')+'</div><div><b>RERA No.:</b> '+esc(p.reraNumber||'Not added')+'</div><div><b>Exact Address:</b> '+esc(p.exactAddress||'Not added')+'</div><div><b>Brochure:</b> '+(p.brochure?'<a href="'+esc(p.brochure)+'" target="_blank">Open brochure</a>':'Not uploaded')+'</div></div><div class="private"><b>Private / Internal Notes:</b><br>'+esc(p.notes||'No private notes yet')+'</div></div>').join(''):'<p class="muted">No projects.</p>'}
