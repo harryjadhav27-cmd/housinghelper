@@ -108,10 +108,23 @@ function renderProperties(){
   applyPropertySearch();
 }
 function applyPropertySearch(){
-  const q=($('propertySearch')?.value||'').trim().toLowerCase(), kind=$('propertyTypeFilter')?.value||'', bhk=$('propertyBhkFilter')?.value||'';
+  const q=(document.getElementById('propertySearch')?.value||'').trim().toLowerCase();
+  const kind=document.getElementById('propertyTypeFilter')?.value||'';
+  const bhk=document.getElementById('propertyBhkFilter')?.value||'';
+  const terms=q.split(/\s+/).filter(Boolean);
   let shown=0,total=0;
-  document.querySelectorAll('#propertyList .admin-listing').forEach(el=>{total++;const text=(el.dataset.search||'').toLowerCase();const okQ=!q||q.split(/\\s+/).every(term=>text.includes(term));const okK=!kind||el.dataset.kind===kind;const okB=!bhk||new RegExp('(^|\\\\D)'+bhk+'\\\\s*bhk','i').test(text)||text.includes(bhk+' bhk');const show=okQ&&okK&&okB;el.style.display=show?'':'none';if(show)shown++});
-  if($('propertySearchCount'))$('propertySearchCount').textContent='Showing '+shown+' of '+total+' listings';
+  document.querySelectorAll('#propertyList .admin-listing').forEach(function(el){
+    total++;
+    const text=(el.getAttribute('data-search')||'').toLowerCase();
+    const okQ=!terms.length || terms.every(function(term){return text.includes(term);});
+    const okK=!kind || el.getAttribute('data-kind')===kind;
+    const okB=!bhk || text.includes(bhk+' bhk') || new RegExp('(^|\\\\D)'+bhk+'\\\\s*bhk','i').test(text);
+    const show=okQ&&okK&&okB;
+    el.style.display=show?'':'none';
+    if(show)shown++;
+  });
+  const count=document.getElementById('propertySearchCount');
+  if(count)count.textContent='Showing '+shown+' of '+total+' listings';
 }
 function clearPropertySearch(){if($('propertySearch'))$('propertySearch').value='';if($('propertyTypeFilter'))$('propertyTypeFilter').value='';if($('propertyBhkFilter'))$('propertyBhkFilter').value='';applyPropertySearch()}
 async function removeProperty(id){if(!confirm('Remove this property from the public listing?'))return;await post({action:'remove',id});loadData()}
